@@ -25,33 +25,13 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
-with LEDs;          use LEDs;
-with Button;
-with Ada.Real_Time; use Ada.Real_Time;
+--  This file provides declarations for the RESET button on the WiFiMCU board.
 
-package body Driver is
+with Ada.Real_Time;
 
-   --  The LEDs are not physically laid out "consecutively" in such a way that
-   --  we can simply go in enumeral order to get circular rotation. Thus we
-   --  define this mapping, using a consecutive index to get the physical LED
-   --  blinking order desired.
+package Button is
+   pragma Elaborate_Body;
 
-   task body Controller is
-      Next_Start : Time := Clock;
-      Light      : Boolean := False;
-   begin
-      loop
-         if Light then
-            Off (Blue);
-         else
-            On (Blue);
-         end if;
+   function Current_Period return Ada.Real_Time.Time_Span;
 
-         Light := not Light;
-
-         Next_Start := Next_Start + Button.Current_Period;
-         delay until Next_Start;
-      end loop;
-   end Controller;
-
-end Driver;
+end Button;
