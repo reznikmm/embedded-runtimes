@@ -33,6 +33,18 @@
 /* This script replaces ld's default linker script, providing the
    appropriate memory map and output format. */
 
+MEMORY
+{
+  flash   (rx) : ORIGIN = 0x0800C000, LENGTH = 464K
+          /* 32k for bootloader + 32k for params */
+  sram12 (rwx) : ORIGIN = 0x20000000, LENGTH = 128K
+}
+
+REGION_ALIAS("sram_tx", sram12)
+REGION_ALIAS("sram_ro", sram12)
+REGION_ALIAS("sram_bs", sram12)
+REGION_ALIAS("sram_da", sram12)
+
 SEARCH_DIR(.)
 __DYNAMIC  =  0;
 
@@ -130,12 +142,5 @@ SECTIONS
   .debug_ranges   0 : { *(.debug_ranges) }
   .gnu.attributes 0 : { KEEP (*(.gnu.attributes)) }
   /DISCARD/ : { *(.note.GNU-stack) *(.gnu_debuglink) *(.gnu.lto_*) }
-}
-
-MEMORY
-{
-  flash   (rx) : ORIGIN = 0x0800C000, LENGTH = 464K
-          /* 32k for bootloader + 32k for params */
-  sram12 (rwx) : ORIGIN = 0x20000000, LENGTH = 128K
 }
 
