@@ -30,6 +30,7 @@ with Ada.Unchecked_Conversion;
 --  with Registers;     use Registers;
 with Interfaces.STM32.GPIO;  use Interfaces.STM32.GPIO;
 with Interfaces.STM32.RCC;   use Interfaces.STM32.RCC;
+with System.STM32;
 
 package body LEDs is
 
@@ -70,18 +71,15 @@ package body LEDs is
 
 
    procedure Initialize is
-      Mode_OUT     : constant := 1;
-      Speed_100MHz : constant := 3;
-      No_Pull      : constant := 0;
    begin
       --  Enable clock for GPIO-A
       RCC_Periph.AHB1ENR.GPIOAEN := 1;
 
       --  Configure PA4
-      GPIOA_Periph.MODER.Arr (4 .. 4) := (others => Mode_OUT);
-      GPIOA_Periph.OTYPER.OT.Arr (4 .. 4) := (others => 0);
-      GPIOA_Periph.OSPEEDR.Arr (4 .. 4) := (others => Speed_100MHz);
-      GPIOA_Periph.PUPDR.Arr (4 .. 4) := (others => No_Pull);
+      GPIOA_Periph.MODER.Arr (4) := System.STM32.Mode_OUT;
+      GPIOA_Periph.OTYPER.OT.Arr (4) := System.STM32.Push_Pull;
+      GPIOA_Periph.OSPEEDR.Arr (4) := System.STM32.Speed_100MHz;
+      GPIOA_Periph.PUPDR.Arr (4) := System.STM32.No_Pull;
    end Initialize;
 
 

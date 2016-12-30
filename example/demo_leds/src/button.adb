@@ -31,6 +31,7 @@ with Interfaces.STM32.EXTI;   use Interfaces.STM32.EXTI;
 with Interfaces.STM32.GPIO;   use Interfaces.STM32.GPIO;
 with Interfaces.STM32.RCC;    use Interfaces.STM32.RCC;
 with Interfaces.STM32.SYSCFG; use Interfaces.STM32.SYSCFG;
+with System.STM32;
 
 package body Button is
 
@@ -80,15 +81,13 @@ package body Button is
    end Current_Period;
 
    procedure Initialize is
-      Mode_IN : constant := 0;
-      No_Pull : constant := 0;
    begin
       --  Enable clock for GPIO-B
       RCC_Periph.AHB1ENR.GPIOBEN := 1;
 
       --  Configure PB2
-      GPIOB_Periph.MODER.Arr (2) := Mode_IN;
-      GPIOB_Periph.PUPDR.Arr (2) := No_Pull;
+      GPIOB_Periph.MODER.Arr (2) := System.STM32.Mode_IN;
+      GPIOB_Periph.PUPDR.Arr (2) := System.STM32.No_Pull;
 
       --  Select PB2 for EXTI2
       SYSCFG_Periph.EXTICR1.EXTI.Arr (2) := 1;  --  PB
