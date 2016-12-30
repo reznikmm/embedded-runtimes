@@ -28,6 +28,7 @@
 with LEDs;          use LEDs;
 with Button;
 with Ada.Real_Time; use Ada.Real_Time;
+with Ada.Text_IO;
 
 package body Driver is
 
@@ -50,6 +51,8 @@ package body Driver is
          Light := not Light;
 
          Next_Start := Next_Start + Button.Current_Period;
+         Ada.Text_IO.Put_Line ("Hello world!");
+
          delay until Next_Start;
       end loop;
    end Controller;

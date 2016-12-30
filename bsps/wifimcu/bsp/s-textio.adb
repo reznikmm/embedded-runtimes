@@ -47,21 +47,20 @@ package body System.Text_IO is
    procedure Initialize is
       use System.BB.Parameters;
 
-      APB_Clock    : constant Positive := Positive (STM32.System_Clocks.PCLK2);
+      APB_Clock    : constant Positive := Positive (STM32.System_Clocks.PCLK1);
       Int_Divider  : constant Positive := (25 * APB_Clock) / (4 * Baudrate);
       Frac_Divider : constant Natural := Int_Divider rem 100;
-
    begin
       Initialized := True;
 
       RCC_Periph.APB1ENR.USART2EN := 1;
-      RCC_Periph.AHB1ENR.GPIOBEN  := 1;
+      RCC_Periph.AHB1ENR.GPIOAEN  := 1;
 
-      GPIOB_Periph.MODER.Arr     (6 .. 7) := (Mode_AF,     Mode_AF);
-      GPIOB_Periph.OSPEEDR.Arr   (6 .. 7) := (Speed_50MHz, Speed_50MHz);
-      GPIOB_Periph.OTYPER.OT.Arr (6 .. 7) := (Push_Pull,   Push_Pull);
-      GPIOB_Periph.PUPDR.Arr     (6 .. 7) := (Pull_Up,     Pull_Up);
-      GPIOB_Periph.AFRL.Arr      (6 .. 7) := (AF_USART2,   AF_USART2);
+      GPIOA_Periph.MODER.Arr     (2 .. 3) := (Mode_AF,      Mode_AF);
+      GPIOA_Periph.OSPEEDR.Arr   (2 .. 3) := (Speed_50MHz,  Speed_50MHz);
+      GPIOA_Periph.OTYPER.OT.Arr (2 .. 3) := (Push_Pull,    Push_Pull);
+      GPIOA_Periph.PUPDR.Arr     (2 .. 3) := (Pull_Up,      Pull_Up);
+      GPIOA_Periph.AFRL.Arr      (2 .. 3) := (AF_USART2,    AF_USART2);
 
       USART2_Periph.BRR :=
         (DIV_Fraction => UInt4  (((Frac_Divider * 16 + 50) / 100) mod 16),
@@ -72,7 +71,7 @@ package body System.Text_IO is
          RE => 1,
          TE => 1,
          others => <>);
-      USART2_Periph.CR2 := (others => <>);
+      USART2_Periph.CR2 := (STOP => 1, others => <>);
       USART2_Periph.CR3 := (others => <>);
    end Initialize;
 
